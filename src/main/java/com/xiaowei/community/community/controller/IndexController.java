@@ -1,22 +1,39 @@
 package com.xiaowei.community.community.controller;
 
+import com.xiaowei.community.community.mapper.UserMapper;
+import com.xiaowei.community.community.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class IndexController {
 
-//    @GetMapping("/index")
-//    public String index(@RequestParam(name = "name") String name, Model model) {
-//        model.addAttribute("name", name);
-//        return "index";
-//    }
+    @Autowired
+    private UserMapper userMapper;
+
+
     @GetMapping("/")
-    public String index() {
+    public String index(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String token = "";
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    User user = userMapper.findByToken(token);
+                    if (user != null) {
+                        request.getSession().setAttribute("user", user);
+                    }
+                    break;
+                }
+            }
+        }
         return "index";
     }
-
-
 }
