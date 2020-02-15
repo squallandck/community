@@ -1,15 +1,25 @@
 package com.xiaowei.community.community.model;
 
-/**
- * Created by yxw on 2020/2/10
- */
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private Integer id;
-    private String name;
+
     private String accountId;
+
+    private String name;
+
     private String token;
+
     private Long gmtCreate;
+
     private Long gmtModify;
+
+    private String bio;
+
+    private String avatarUrl;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -19,20 +29,20 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAccountId() {
         return accountId;
     }
 
     public void setAccountId(String accountId) {
-        this.accountId = accountId;
+        this.accountId = accountId == null ? null : accountId.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getToken() {
@@ -40,7 +50,7 @@ public class User {
     }
 
     public void setToken(String token) {
-        this.token = token;
+        this.token = token == null ? null : token.trim();
     }
 
     public Long getGmtCreate() {
@@ -59,15 +69,19 @@ public class User {
         this.gmtModify = gmtModify;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", accountId='" + accountId + '\'' +
-                ", token='" + token + '\'' +
-                ", gmtCreate=" + gmtCreate +
-                ", gmtModify=" + gmtModify +
-                '}';
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio == null ? null : bio.trim();
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
     }
 }

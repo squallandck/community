@@ -1,22 +1,33 @@
 package com.xiaowei.community.community.mapper;
 
 import com.xiaowei.community.community.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
+import com.xiaowei.community.community.model.UserExample;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.session.RowBounds;
 
-/**
- * Created by yxw on 2020/2/10
- */
-@Mapper
 public interface UserMapper {
+    long countByExample(UserExample example);
 
-    @Insert("Insert into user(name, account_id, token, gmt_create, gmt_modify) values (#{name}, #{accountId},#{token},#{gmtCreate},#{gmtModify})")
-    void insert(User user);
+    int deleteByExample(UserExample example);
 
-    @Select("Select * from user where token = #{token}")
-    User findByToken(@Param("token") String token);
+    int deleteByPrimaryKey(Integer id);
 
+    int insert(User record);
 
+    int insertSelective(User record);
+
+    List<User> selectByExampleWithRowbounds(UserExample example, RowBounds rowBounds);
+
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }

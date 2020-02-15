@@ -8,6 +8,6 @@ create table USER
     GMT_CREATE BIGINT,
     GMT_MODIFY BIGINT,
     constraint USER_PK
-        primary key (ID)
+    primary key (ID)
 );
 

@@ -5,6 +5,7 @@ import com.xiaowei.community.community.dto.GithubUser;
 import com.xiaowei.community.community.mapper.UserMapper;
 import com.xiaowei.community.community.model.User;
 import com.xiaowei.community.community.provider.GithubProvider;
+import com.xiaowei.community.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,9 +27,7 @@ public class AuthController {
     private GithubProvider githubProvider;
 
     @Autowired
-    private UserMapper userMapper;
-
-
+    private UserService userService;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -51,18 +50,27 @@ public class AuthController {
         accessTokenDto.setClient_secret(clientSecret);
         String accessToken = githubProvider.getAccessToken(accessTokenDto);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if (githubUser != null) {
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
             user.setAccountId(String.valueOf(githubUser.getId()));
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModify(user.getGmtCreate());
-            userMapper.insert(user);
+            user.setAvatarUrl(githubUser.getAvatarUrl());
+            userService.createOrUpdate(user);
             response.addCookie(new Cookie("token", token));
-            
+
         }
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return "redirect:/";
     }
 }
